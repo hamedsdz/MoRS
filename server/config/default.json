@@ -1,0 +1,4 @@
+{
+  "mongoURI": "mongodb+srv://hamedsdz:sadeghzadeh79@mors.ajybh77.mongodb.net/?retryWrites=true&w=majority",
+  "jwtSecret": "mySuperSecretPassword"
+}
