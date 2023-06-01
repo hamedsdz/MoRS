@@ -1,3 +1,4 @@
+import sys
 import numpy as np
 from sklearn.metrics.pairwise import cosine_similarity
 import pandas as pd
@@ -56,9 +57,8 @@ def get_movie_recommendations(user, user_similarity, user_movie_matrix, movies, 
     return recommended_movies
 
 
-user = ObjectId("6475df2826a4cdfc8f47f010")
-top_n = 11
+user = ObjectId(sys.argv[2])
 
 recommended_movies = get_movie_recommendations(
-    user, user_similarity, user_movie_matrix, movies, top_n)
+    user, user_similarity, user_movie_matrix, movies)
 print(recommended_movies)
