@@ -1,3 +1,82 @@
 @tailwind base;
 @tailwind components;
+
+@font-face {
+  font-family: "IRANYekan";
+  src: url("../assets/fonts/IRANYekanWebMedium.ttf") format("truetype");
+  src: url("../assets/fonts/IRANYekanWebMedium.eot") format("embedded-opentype"),
+    url("../assets/fonts/IRANYekanWebMedium.woff2") format("woff2"),
+    url("../assets/fonts/IRANYekanWebMedium.woff") format("woff"),
+    url("../assets/fonts/IRANYekanWebMedium.ttf") format("truetype");
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "IRANYekan";
+  src: url("../assets/fonts/IRANYekanWebBold.ttf") format("truetype");
+  src: url("../assets/fonts/IRANYekanWebBold.eot") format("embedded-opentype"),
+    url("../assets/fonts/IRANYekanWebBold.woff2") format("woff2"),
+    url("../assets/fonts/IRANYekanWebBold.woff") format("woff"),
+    url("../assets/fonts/IRANYekanWebBold.ttf") format("truetype");
+  font-weight: bold;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "IRANYekan";
+  src: url("../assets/fonts/IRANYekanWebLight.ttf") format("truetype");
+  src: url("../assets/fonts/IRANYekanWebLight.eot") format("embedded-opentype"),
+    url("../assets/fonts/IRANYekanWebLight.woff2") format("woff2"),
+    url("../assets/fonts/IRANYekanWebLight.woff") format("woff"),
+    url("../assets/fonts/IRANYekanWebLight.ttf") format("truetype");
+  font-weight: 300;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "IRANYekan";
+  src: url("../assets/fonts/IRANYekanWebThin.ttf") format("truetype");
+  src: url("../assets/fonts/IRANYekanWebThin.eot") format("embedded-opentype"),
+    url("../assets/fonts/IRANYekanWebThin.woff2") format("woff2"),
+    url("../assets/fonts/IRANYekanWebThin.woff") format("woff"),
+    url("../assets/fonts/IRANYekanWebThin.ttf") format("truetype");
+  font-weight: 100;
+  font-style: normal;
+}
+* :not(i),
+[class^="ant"] {
+  font-family: "IRANYekan";
+}
+
 @tailwind utilities;
+
+*:focus-within,
+html:focus-within,
+body:focus-within {
+  outline: none !important;
+  outline-offset: 0 !important;
+  -webkit-tap-highlight-color: transparent !important;
+  -webkit-appearance: none !important;
+}
+
+.glass-style {
+  background: rgba(255, 255, 255, 0.48);
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+  backdrop-filter: blur(7.8px);
+  -webkit-backdrop-filter: blur(7.8px);
+}
+
+/* Ant Modal */
+.ant-modal {
+  border-radius: 0.5rem !important;
+}
+
+.ant-modal-content {
+  background: linear-gradient(35deg, #3a3e40, #5e6466) !important;
+}
+
+.ant-modal-header {
+  background: transparent !important;
+}
+/*  */

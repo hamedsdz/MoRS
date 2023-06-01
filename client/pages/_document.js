@@ -4,7 +4,7 @@ export default function Document() {
   return (
     <Html lang="fa">
       <Head />
-      <body>
+      <body dir="rtl" className="select-none scroll-smooth bg-gray-900 m-0 p-0">
         <Main />
         <NextScript />
       </body>

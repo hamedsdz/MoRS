@@ -81,13 +81,13 @@ router.get("/:id", auth, async (req, res) => {
   try {
     const movie = await Movie.findById(req.params.id);
     if (!movie) {
-      return res.status(404).json({ msg: "movieNotFound" });
+      return res.status(404).json({ errors: [{ msg: "movieNotFound" }] });
     }
     res.json(movie);
   } catch (err) {
     console.error(err.message);
     if (err.kind === "ObjectId") {
-      return res.status(404).json({ msg: "movieNotFound" });
+      return res.status(404).json({ errors: [{ msg: "movieNotFound" }] });
     }
     res.status(500).send("serverError");
   }
@@ -104,7 +104,7 @@ router.delete("/:id", auth, async (req, res) => {
   } catch (err) {
     console.error(err.message);
     if (err.kind === "ObjectId") {
-      return res.status(404).json({ msg: "movieNotFound" });
+      return res.status(404).json({ errors: [{ msg: "movieNotFound" }] });
     }
     res.status(500).send("serverError");
   }

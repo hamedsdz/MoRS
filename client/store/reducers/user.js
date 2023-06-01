@@ -1,5 +1,5 @@
 import { HYDRATE } from "next-redux-wrapper";
-import { LOGIN, SIGNUP, LOGOUT } from "../names";
+import { LOGIN, SIGNUP, LOGOUT, USER_INFO } from "../names";
 // serializer
 import { userSerializer } from "serializer";
 
@@ -28,6 +28,12 @@ const user = (state = initialState, action) => {
       return {
         ...state,
         isLoggedIn: true,
+        ...userSerializer(action.payload),
+      };
+    }
+    case USER_INFO: {
+      return {
+        ...state,
         ...userSerializer(action.payload),
       };
     }

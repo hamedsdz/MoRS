@@ -1,5 +1,6 @@
 const express = require("express");
 const connectDB = require("./config/db");
+const cors = require("cors");
 
 const app = express();
 
@@ -8,6 +9,7 @@ connectDB();
 
 // Init Middleware
 app.use(express.json({ extended: false }));
+app.use(cors());
 
 app.get("/", (req, res) => {
   res.send("Hello From MoRS!");
@@ -15,7 +17,6 @@ app.get("/", (req, res) => {
 
 // Define Routes
 app.use("/api/auth", require("./routes/auth"));
-app.use("/api/users", require("./routes/users"));
 app.use("/api/ratings", require("./routes/ratings"));
 app.use("/api/movies", require("./routes/movies"));
 

@@ -20,7 +20,7 @@ router.post("/:id", auth, body("rate", "rateIsRequired").notEmpty(), async (req,
   try {
     const movie = await Movie.findById(req.params.id);
     if (!movie) {
-      return res.status(404).json({ msg: "movieNotFound" });
+      return res.status(404).json({ errors: [{ msg: "movieNotFound" }] });
     }
     let rating = await Rating.findOne({ user: req.user.id, movie: req.params.id });
     if (rating) {
@@ -39,7 +39,7 @@ router.post("/:id", auth, body("rate", "rateIsRequired").notEmpty(), async (req,
   } catch (err) {
     console.error(err.message);
     if (err.kind === "ObjectId") {
-      return res.status(404).json({ msg: "movieNotFound" });
+      return res.status(404).json({ errors: [{ msg: "movieNotFound" }] });
     }
     res.status(500).send("serverError");
   }
