@@ -6,15 +6,13 @@ import { NonLogin } from "auth";
 // api
 import { useSignupUser } from "apis/users";
 // layouts
-import MainLayout from "layouts/main";
+import SimpleLayout from "layouts/simple";
 // components
 import { FcPhotoReel } from "react-icons/fc";
 import CustomInput from "components/input";
 import Caption from "components/caption";
 import CustomButton from "components/button";
 import { translateText } from "components/translate";
-// assets
-// import MoviePic from "assets/images";
 
 const SignUp = () => {
   const router = useRouter();
@@ -23,7 +21,7 @@ const SignUp = () => {
   const [{ loading }, apiCall] = useSignupUser(() => router.push("/"));
 
   return (
-    <div className="min-h-max flex flex-col items-center justify-center max-w-[20rem] mx-auto gap-4 my-16">
+    <div className="min-h-[calc(100vh-5rem)] flex flex-col items-center justify-center max-w-[20rem] mx-auto gap-4 py-10">
       <span className="text-9xl -m-8">
         <FcPhotoReel />
       </span>
@@ -82,7 +80,7 @@ const SignUp = () => {
 SignUp.getLayout = function getLayout(page) {
   return (
     <NonLogin>
-      <MainLayout>{page}</MainLayout>
+      <SimpleLayout>{page}</SimpleLayout>
     </NonLogin>
   );
 };

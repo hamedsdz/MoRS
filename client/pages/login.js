@@ -6,7 +6,7 @@ import { NonLogin } from "auth";
 // api
 import { useLoginUser } from "apis/users";
 // layouts
-import MainLayout from "layouts/main";
+import SimpleLayout from "layouts/simple";
 // components
 import { FcFilmReel } from "react-icons/fc";
 import CustomInput from "components/input";
@@ -21,11 +21,11 @@ const Login = () => {
   const [{ loading }, apiCall] = useLoginUser(() => router.push("/"));
 
   return (
-    <div className="min-h-max flex flex-col items-center justify-center max-w-[20rem] mx-auto gap-4 my-16">
-      <span className="text-9xl -m-8">
+    <div className="min-h-[calc(100vh-5rem)]  flex flex-col items-center justify-center max-w-[20rem] mx-auto gap-4 my-10">
+      <span className="text-8xl md:text-9xl  -m-8">
         <FcFilmReel />
       </span>
-      <Caption text className="text-white text-2xl">
+      <Caption text className="text-white text-xl md:text-2xl">
         loginToMORS
       </Caption>
       <CustomInput
@@ -70,7 +70,7 @@ const Login = () => {
 Login.getLayout = function getLayout(page) {
   return (
     <NonLogin>
-      <MainLayout>{page}</MainLayout>
+      <SimpleLayout>{page}</SimpleLayout>
     </NonLogin>
   );
 };
