@@ -5,7 +5,7 @@ import Caption from "components/caption";
 export default function EmptyResult() {
   return (
     <div className="flex flex-col text-center">
-      <span className="text-center text-5xl text-neutral-neu6">
+      <span className="text-center text-5xl text-neutral-900">
         <HiInboxStack />
       </span>
       <Caption text bold>

@@ -16,7 +16,7 @@ export default function FullLoading() {
           />
         </svg>
 
-        <div>Loading ...</div>
+        <div>درحال بارگذاری ...</div>
       </div>
     </div>
   );

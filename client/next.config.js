@@ -7,6 +7,23 @@ const nextConfig = {
     backdropUrl: process.env.BACKDROP_IMAGES_BASE_URL,
     posterUrl: process.env.POSTER_IMAGES_BASE_URL,
   },
+  images: {
+    remotePatterns: [
+      {
+        protocol: "https",
+        hostname: "image.tmdb.org",
+        port: "",
+        pathname: "/t/p/**",
+      },
+    ],
+  },
+  i18n: {
+    locales: ["fa"],
+    defaultLocale: "fa",
+  },
+  images: {
+    unoptimized: true,
+  },
 };
 
 module.exports = nextConfig;

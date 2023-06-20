@@ -1,42 +1,89 @@
 const express = require("express");
 const router = express.Router();
-const { spawn } = require("child_process");
 const auth = require("../middleware/auth");
-const { body, query, validationResult } = require("express-validator");
-// models
 const Movie = require("../models/Movie");
+const { body, validationResult } = require("express-validator");
 
-// @route   GET api/movies
-// @desc    Get All Movies
-// @access  Private
+// GET /api/movies
+// Get all movies with pagination
+// Private route
 router.get("/", auth, async (req, res) => {
+  const page = parseInt(req.query.page) || 1;
+  const limit = parseInt(req.query.limit) || 10;
+
   try {
-    const movies = await Movie.find().sort({ date: -1 });
-    res.json(movies);
+    const movies = await Movie.paginate({}, { page, limit });
+
+    res.json({ movies });
   } catch (err) {
     console.error(err.message);
-    res.status(500).send("serverError");
+    res.status(500).json({ message: "Server error" });
   }
 });
 
-// @route   POST api/movies
-// @desc    Create A Movie
-// @access  Private
+// GET /api/movies/search
+// Search movies by title with pagination
+// Private route
+router.get("/search", auth, async (req, res) => {
+  const page = parseInt(req.query.page) || 1;
+  const limit = parseInt(req.query.limit) || 10;
+  const searchTerm = req.query.title;
+
+  try {
+    const movies = await Movie.paginate(
+      { title: { $regex: new RegExp(searchTerm, "i") } },
+      { page, limit }
+    );
+
+    res.json({ movies });
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).json({ message: "Server error" });
+  }
+});
+
+// GET /api/movies/:id
+// Get a single movie by id
+// Private route
+router.get("/:id", auth, async (req, res) => {
+  const movieId = req.params.id;
+
+  try {
+    const movie = await Movie.findById(movieId);
+
+    if (!movie) {
+      return res.status(404).json({ message: "Movie not found" });
+    }
+
+    res.json({ movie });
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).json({ message: "Server error" });
+  }
+});
+
+// POST /api/movies
+// Create a new movie
+// Private route
 router.post(
   "/",
   auth,
-  body("title", "titleIsRequired").trim().notEmpty(),
-  body("genres", "genresAreRequired").notEmpty().isArray(),
+  [
+    body("title").trim().notEmpty().withMessage("Title is required"),
+    body("genres")
+      .isArray({ min: 1 })
+      .withMessage("Genres must be an array with at least one item"),
+  ],
   async (req, res) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
       return res.status(400).json({ errors: errors.array() });
     }
+
     const {
       title,
       original_title,
       genres,
-      type,
       overview,
       poster_path,
       production_countries,
@@ -46,17 +93,10 @@ router.post(
     } = req.body;
 
     try {
-      let movie = await Movie.findOne({ title });
-
-      if (movie) {
-        return res.status(400).json({ errors: [{ msg: "movieAlreadyExists" }] });
-      }
-
-      const newMovie = new Movie({
+      const movie = new Movie({
         title,
         original_title,
         genres,
-        type,
         overview,
         poster_path,
         production_countries,
@@ -65,54 +105,96 @@ router.post(
         backdrop_image_path,
       });
 
-      movie = await newMovie.save();
-      res.json(movie);
+      await movie.save();
+
+      res.json({ movie });
     } catch (err) {
       console.error(err.message);
-      res.status(500).send("serverError");
+      res.status(500).json({ message: "Server error" });
     }
   }
 );
 
-// @route   GET api/movies/:id
-// @desc    Get Movie By Id
-// @access  Private
-router.get("/:id", auth, async (req, res) => {
-  try {
-    const movie = await Movie.findById(req.params.id);
-    if (!movie) {
-      return res.status(404).json({ errors: [{ msg: "movieNotFound" }] });
+// PUT /api/movies/:id
+// Update a movie by id
+// Private route
+router.put(
+  "/:id",
+  auth,
+  [
+    body("title").trim().notEmpty().withMessage("Title is required"),
+    body("genres")
+      .isArray({ min: 1 })
+      .withMessage("Genres must be an array with at least one item"),
+  ],
+  async (req, res) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(400).json({ errors: errors.array() });
     }
-    res.json(movie);
-  } catch (err) {
-    console.error(err.message);
-    if (err.kind === "ObjectId") {
-      return res.status(404).json({ errors: [{ msg: "movieNotFound" }] });
-    }
-    res.status(500).send("serverError");
-  }
-});
 
-// @route   DELETE api/movies/:id
-// @desc    Delete Movie By Id
-// @access  Private
+    const {
+      title,
+      original_title,
+      genres,
+      overview,
+      poster_path,
+      production_countries,
+      release_date,
+      status,
+      backdrop_image_path,
+    } = req.body;
+
+    try {
+      const movie = await Movie.findByIdAndUpdate(
+        req.params.id,
+        {
+          title,
+          original_title,
+          genres,
+          overview,
+          poster_path,
+          production_countries,
+          release_date,
+          status,
+          backdrop_image_path,
+        },
+        { new: true }
+      );
+
+      if (!movie) {
+        return res.status(404).json({ message: "Movie not found" });
+      }
+
+      res.json({ movie });
+    } catch (err) {
+      console.error(err.message);
+      res.status(500).json({ message: "Server error" });
+    }
+  }
+);
+
+// DELETE /api/movies/:id
+// Delete a movie by id
+// Private route
 router.delete("/:id", auth, async (req, res) => {
   try {
-    const movie = await Movie.findByIdAndRemove(req.params.id);
+    const movie = await Movie.findByIdAndDelete(req.params.id);
 
-    res.json({ msg: "movieRemoved" });
+    if (!movie) {
+      return res.status(404).json({ message: "Movie not found" });
+    }
+
+    res.json({ message: "Movie deleted successfully" });
   } catch (err) {
     console.error(err.message);
-    if (err.kind === "ObjectId") {
-      return res.status(404).json({ errors: [{ msg: "movieNotFound" }] });
-    }
-    res.status(500).send("serverError");
+    res.status(500).json({ message: "Server error" });
   }
 });
 
-// @route   GET api/movies/recommendation/list
-// @desc    Get Recommended Movies List
-// @access  Private
+// GET api/movies/recommendation/list
+// Get Recommended Movies List
+// Private route
 router.get("/recommendation/list", auth, async (req, res) => {
   try {
     const pythonProcess = spawn("python3", [

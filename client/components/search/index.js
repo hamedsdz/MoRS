@@ -1,41 +1,19 @@
 import { useState } from "react";
+// api
+import { useSearchMovies } from "apis/movies";
 // components
 import Caption from "components/caption";
 import { FaTimes, FaSearch } from "react-icons/fa";
-import { Modal, Input, List, Skeleton, Avatar, Button } from "antd";
+import { Modal, Input, List } from "antd";
+import Card from "components/card";
 import { translateText } from "components/translate";
 
 export default function SearchModal({ open, setOpen }) {
-  const [initLoading, setInitLoading] = useState(false);
-  const [loading, setLoading] = useState(false);
-  const [data, setData] = useState([]);
-  const [list, setList] = useState([]);
+  const limit = 5;
+  const [search, setSearch] = useState(undefined);
+  const [page, setPage] = useState(1);
 
-  const onLoadMore = () => {
-    setLoading(true);
-    setList(
-      data.concat(
-        [...new Array(5)].map(() => ({
-          loading: true,
-          name: {},
-          picture: {},
-        }))
-      )
-    );
-  };
-  const loadMore =
-    !initLoading && !loading ? (
-      <div
-        style={{
-          textAlign: "center",
-          marginTop: 12,
-          height: 32,
-          lineHeight: "32px",
-        }}
-      >
-        <Button onClick={onLoadMore}>{translateText("showAll")}</Button>
-      </div>
-    ) : null;
+  const [{ loading, data }, apiCall] = useSearchMovies();
 
   return (
     <div>
@@ -47,7 +25,7 @@ export default function SearchModal({ open, setOpen }) {
         closeIcon={<FaTimes />}
         footer={null}
         onCancel={() => setOpen(false)}
-        className="bg-gray-900"
+        className="w-3/5"
       >
         <Input
           placeholder={`${translateText("search")}...`}
@@ -55,22 +33,26 @@ export default function SearchModal({ open, setOpen }) {
           type="text"
           prefix={<FaSearch className="p-2" />}
           className="flex-1 px-1 mb-2"
+          onChange={(e) => setSearch(e.target.value)}
+          value={search}
+          onPressEnter={() => apiCall({ search, limit, page })}
         />
         <List
-          className="max-h-[calc(100vh/1.5)] overflow-y-auto"
-          loading={initLoading}
-          itemLayout="horizontal"
-          loadMore={loadMore}
-          dataSource={list}
+          className="max-h-[calc(100vh/1.5)] overflow-y-auto overflow-x-hidden py-4 shadow-none items-center justify-center"
+          loading={loading}
+          grid={{
+            gutter: 16,
+            xs: 1,
+            sm: 2,
+            md: 3,
+            lg: 3,
+            xl: 3,
+            xxl: 3,
+          }}
+          dataSource={data?.movies?.docs ?? []}
           renderItem={(item) => (
             <List.Item>
-              <Skeleton avatar title={false} loading={item.loading} active>
-                <List.Item.Meta
-                  avatar={<Avatar src={item.picture.large} />}
-                  title={<a href="#">{item.name?.last}</a>}
-                  description=""
-                />
-              </Skeleton>
+              <Card poster={item.poster_path} size="small" />
             </List.Item>
           )}
         />

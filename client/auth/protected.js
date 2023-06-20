@@ -10,14 +10,11 @@ import { message } from "antd";
 import Loading from "components/loading";
 import { translateText } from "components/translate";
 
-export default function Protected({ children, requiredRoles }) {
+export default function Protected({ children }) {
   const dispatch = useDispatch();
   const router = useRouter();
   const [loading, setLoading] = useState(true);
-  const { token, userPermissions, isLoggedIn } = useSelector((state) => state.user);
-  const validationRoles = userPermissions
-    ? userPermissions.some((role) => requiredRoles.includes(role))
-    : [];
+  const { token, isLoggedIn } = useSelector((state) => state.user);
 
   function redirectToLogin() {
     dispatch({ type: LOGOUT });
@@ -55,14 +52,9 @@ export default function Protected({ children, requiredRoles }) {
     }
   }
 
-  async function initNotLogin() {
-    if (!isLoggedIn) redirectToLogin();
-    else if (isLoggedIn && requiredRoles.length && !validationRoles) router.push("/access-denied");
-  }
-
   useEffect(() => {
     if (isLoggedIn) initLogin();
-    else initNotLogin();
+    else redirectToLogin();
   }, []);
 
   if (loading) return <Loading />;

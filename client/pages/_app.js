@@ -7,6 +7,8 @@ import MORS from "./_mors";
 // components
 import SeoHead from "components/SEO";
 // styles
+import "slick-carousel/slick/slick.css";
+import "slick-carousel/slick/slick-theme.css";
 import "styles/globals.css";
 
 function App({ Component, ...rest }) {
