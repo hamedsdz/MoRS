@@ -15,8 +15,8 @@ function Home() {
   return (
     <div className="container max-w-[900px]">
       {/* carousel */}
-      {data && <CustomCarousel loading={loading} slides={data} />}
-      {PopularData && (
+      {data && !!data.length && <CustomCarousel loading={loading} slides={data} />}
+      {PopularData && !!PopularData.length && (
         <MoviesSlider
           loading={popularLoading}
           movies={PopularData}
@@ -24,7 +24,7 @@ function Home() {
           className="md:mt-[calc(100vh-3rem)]"
         />
       )}
-      {recommendationData && (
+      {recommendationData && !!recommendationData.length && (
         <MoviesSlider
           loading={recommendationLoading}
           movies={recommendationData}

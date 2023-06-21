@@ -1,17 +1,26 @@
 import { useState } from "react";
 import dynamic from "next/dynamic";
+import { useRouter } from "next/router";
 import Link from "next/link";
+// redux
+import { connect, useDispatch } from "react-redux";
+import { LOGOUT, RESET } from "store/names";
+// api
+import AxiosInstance from "apis/instance";
 // assets
 import LogoFile from "assets/svgs/logo.svg";
 // hooks
 import useWindowDimensions from "hooks/useWindowDimensions";
 // components
 import Caption from "components/caption";
-import { IoSearch } from "react-icons/io5";
+import { IoSearch, IoLogOut } from "react-icons/io5";
+import { Avatar, Dropdown } from "antd";
 const Logo = dynamic(() => import("components/logo"), { ssr: false });
 const SearchModal = dynamic(() => import("components/search"), { ssr: false });
 
-export default function CustomHeader() {
+function CustomHeader({ avatar }) {
+  const dispatch = useDispatch();
+  const router = useRouter();
   const { width } = useWindowDimensions();
   const [showSearch, setShowSearch] = useState(false);
   return (
@@ -28,9 +37,9 @@ export default function CustomHeader() {
           </Caption>
         </Link>
       </div>
-      <div className="flex items-center justify-center bg-white px-2 py-1 rounded-2xl">
+      <div className="flex items-center justify-center gap-2">
         <div
-          className="text-xl md:text-3xl leading-3 text-center text-black cursor-pointer flex items-center justify-center"
+          className="text-xl md:text-3xl leading-3 text-center text-black cursor-pointer flex items-center justify-center bg-white px-2 py-1 rounded-2xl"
           onClick={() => setShowSearch(true)}
         >
           <IoSearch className="ml-2" />
@@ -38,8 +47,52 @@ export default function CustomHeader() {
             search
           </Caption>
         </div>
+        <div className="rounded-full bg-white p-0.5 md:p-0 cursor-pointer">
+          <Dropdown
+            menu={{
+              items: [
+                {
+                  key: "2",
+                  label: (
+                    <div
+                      className="flex items-center gap-2 text-white"
+                      onClick={() => {
+                        dispatch({ type: LOGOUT });
+                        dispatch({ type: RESET });
+                        AxiosInstance.defaults.headers.common["x-auth-token"] = undefined;
+                        router.push("/login");
+                      }}
+                    >
+                      <IoLogOut className="text-gray-900 text-xl" />
+                      <Caption text>logout</Caption>
+                    </div>
+                  ),
+                },
+              ],
+            }}
+            placement="bottomLeft"
+            arrow={{
+              pointAtCenter: true,
+            }}
+          >
+            <Avatar
+              src={avatar}
+              shape="circle"
+              size={{
+                xs: 28,
+                sm: 28,
+                md: 40,
+                lg: 40,
+                xl: 40,
+                xxl: 40,
+              }}
+            />
+          </Dropdown>
+        </div>
         <SearchModal open={showSearch} setOpen={setShowSearch} />
       </div>
     </header>
   );
 }
+
+export default connect((state) => state.user)(CustomHeader);
