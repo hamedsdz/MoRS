@@ -20,5 +20,8 @@
   "passwordIsRequired": "گذرواژه را به درستی وارد کنید.",
   "emailIsNotValid": "ایمیل را به درستی وارد کنید.",
   "userAlreadyExists": "کاربر تکراری می‌باشد.",
-  "loginAgain": "دوباره وارد شوید."
+  "loginAgain": "دوباره وارد شوید.",
+  "popular": "محبوب‌ترین‌ها",
+  "recommendation": "فیلم‌های پیشنهادی",
+  "more": "بیشتر"
 }

@@ -1,8 +1,11 @@
 const express = require("express");
 const router = express.Router();
-const auth = require("../middleware/auth");
-const Movie = require("../models/Movie");
 const { body, validationResult } = require("express-validator");
+const { spawn } = require("child_process");
+// middleware
+const auth = require("../middleware/auth");
+// models
+const Movie = require("../models/Movie");
 
 // GET /api/movies
 // Get all movies with pagination
@@ -10,32 +13,47 @@ const { body, validationResult } = require("express-validator");
 router.get("/", auth, async (req, res) => {
   const page = parseInt(req.query.page) || 1;
   const limit = parseInt(req.query.limit) || 10;
+  const genre = req.query.genre;
 
   try {
-    const movies = await Movie.paginate({}, { page, limit });
+    const movies = await Movie.paginate({ genre: genre }, { page, limit });
 
-    res.json({ movies });
+    res.json(movies);
   } catch (err) {
     console.error(err.message);
     res.status(500).json({ message: "Server error" });
   }
 });
 
-// GET /api/movies/search
+// GET /api/movies/all/search
 // Search movies by title with pagination
 // Private route
-router.get("/search", auth, async (req, res) => {
-  const page = parseInt(req.query.page) || 1;
-  const limit = parseInt(req.query.limit) || 10;
+router.get("/all/search", auth, async (req, res) => {
   const searchTerm = req.query.title;
 
   try {
-    const movies = await Movie.paginate(
-      { title: { $regex: new RegExp(searchTerm, "i") } },
-      { page, limit }
-    );
+    const movies = await Movie.find({
+      $or: [
+        { title: { $regex: new RegExp(searchTerm, "i") } },
+        { original_title: { $regex: new RegExp(searchTerm, "i") } },
+      ],
+    }).limit(10);
 
-    res.json({ movies });
+    res.json(movies);
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).json({ message: "Server error" });
+  }
+});
+
+// GET /api/movies/all/random
+// Get all movies with pagination
+// Private route
+router.get("/all/random", auth, async (req, res) => {
+  try {
+    const movies = await Movie.aggregate([{ $sample: { size: 10 } }]);
+
+    res.json(movies);
   } catch (err) {
     console.error(err.message);
     res.status(500).json({ message: "Server error" });
@@ -192,6 +210,53 @@ router.delete("/:id", auth, async (req, res) => {
   }
 });
 
+// GET /api/movies/all/popular
+// Get popular movies
+// Private route
+router.get("/all/popular", auth, async (req, res) => {
+  try {
+    // Retrieve all movies with their associated ratings
+    const movies = await Movie.aggregate([
+      {
+        $lookup: {
+          from: "ratings",
+          localField: "_id",
+          foreignField: "movie",
+          as: "ratings",
+        },
+      },
+    ]);
+
+    // Calculate average ratings for each movie
+    const moviesWithAverageRatings = movies.map((movie) => {
+      const totalRates = movie.ratings.length;
+      const sumOfRates = movie.ratings.reduce((acc, rating) => acc + parseInt(rating.rate), 0);
+      const averageRate = totalRates > 0 ? sumOfRates / totalRates : 0;
+
+      return {
+        ...movie,
+        averageRate: averageRate.toFixed(1),
+        totalRates,
+      };
+    });
+
+    // Sort movies by popularity (total rates) and average rate
+    const sortedMovies = moviesWithAverageRatings.sort((a, b) => {
+      if (a.totalRates !== b.totalRates) {
+        return b.totalRates - a.totalRates; // Sort by total rates (popularity)
+      } else {
+        return b.averageRate - a.averageRate; // Sort by average rate
+      }
+    });
+
+    // Send the sorted movies as the API response
+    res.json(sortedMovies);
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).json({ message: "Server error" });
+  }
+});
+
 // GET api/movies/recommendation/list
 // Get Recommended Movies List
 // Private route
@@ -205,7 +270,7 @@ router.get("/recommendation/list", auth, async (req, res) => {
     // Capture the output from the Python process
     let output = "";
     pythonProcess.stdout.on("data", (data) => {
-      output += data.toString();
+      output += data;
     });
 
     // Handle any errors from the Python process
@@ -219,7 +284,8 @@ router.get("/recommendation/list", auth, async (req, res) => {
       if (output === `User ID ${req.user.id} not found in the user_movie_matrix.`) {
         res.status(401).send("userIdNotFound");
       }
-      res.json(output);
+
+      res.json(JSON.parse(output));
     });
   } catch (err) {
     console.error(err.message);

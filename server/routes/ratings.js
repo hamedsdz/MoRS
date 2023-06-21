@@ -14,8 +14,8 @@ router.post(
     body("movieId").trim().notEmpty().withMessage("Movie ID is required"),
     body("rate")
       .trim()
-      .isFloat({ min: 0, max: 10 })
-      .withMessage("Rate must be a number between 0 and 10"),
+      .isFloat({ min: 0, max: 5 })
+      .withMessage("Rate must be a number between 0 and 5"),
   ],
   async (req, res) => {
     const errors = validationResult(req);

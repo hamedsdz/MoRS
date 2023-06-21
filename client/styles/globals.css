@@ -80,32 +80,24 @@ body:focus-within {
   background: transparent !important;
 }
 
-/* .slick-slide {
-  width: 100%;
-  height: 50vh;
+/* SLIDER Styles */
+.movie-slider-container .ant-typography {
+  color: white !important;
 }
-.slick-slide > div {
-  height: 100%;
-} */
+
+.movieSlider .slick-list {
+  padding: 0.5rem 0;
+}
+
 /* POSTER Styles */
-.card.small {
-  width: 8rem;
-  height: 12rem;
+.card {
+  width: 10rem;
+  height: 15rem;
 }
 
 .poster {
   position: relative;
   overflow: hidden;
-}
-.small .poster::before {
-  content: "";
-  position: absolute;
-  bottom: -120px;
-  width: 100%;
-  height: 100%;
-  background: linear-gradient(0deg, #b8b9bd 50%, transparent);
-  transition: 0.5s;
-  z-index: 1;
 }
 
 .poster::before {
@@ -113,8 +105,8 @@ body:focus-within {
   position: absolute;
   bottom: -180px;
   width: 100%;
-  height: 100%;
-  background: linear-gradient(0deg, #b8b9bd 50%, transparent);
+  height: 150%;
+  background: linear-gradient(0deg, #0b0c11cc, transparent);
   transition: 0.5s;
   z-index: 1;
 }
@@ -124,11 +116,33 @@ body:focus-within {
 .card .poster img {
   transition: 0.5s;
 }
-.card.small:hover .poster img {
-  transform: translateY(-80px) !important;
-  filter: blur(3px) !important;
-}
+
 .card:hover .poster img {
   transform: translateY(-50px) !important;
-  filter: blur(5px) !important;
+  filter: blur(3px) !important;
+}
+
+.card:hover .details {
+  bottom: 10px;
+}
+
+.card .details {
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  width: 90%;
+  padding: 0.2rem 1rem;
+  z-index: 2;
+  transition: 0.5s;
+  text-align: right;
+  margin: auto;
+  transform: translateX(-50%);
+}
+
+.card .details .overview {
+  display: none;
+}
+
+.card:hover .details .overview {
+  display: block;
 }

@@ -14,7 +14,9 @@ export default function useSearchMovies(next) {
 
     setData({ ...data, loading: true });
 
-    AxiosInstance.get(`/api/movies?search=${body?.search}&page=${body?.page}&limit=${body?.limit}`)
+    AxiosInstance.get(
+      `/api/movies/all/search?title=${body?.search}&page=${body?.page}&limit=${body?.limit}`
+    )
       .then((res) => {
         setData({ data: res.data, error: null, loading: false });
         if (next) next();

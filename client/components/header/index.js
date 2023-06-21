@@ -34,7 +34,9 @@ export default function CustomHeader() {
           onClick={() => setShowSearch(true)}
         >
           <IoSearch className="ml-2" />
-          <Caption text>search</Caption>
+          <Caption text style={{ color: "black" }}>
+            search
+          </Caption>
         </div>
         <SearchModal open={showSearch} setOpen={setShowSearch} />
       </div>

@@ -7,9 +7,10 @@ import { FaTimes, FaSearch } from "react-icons/fa";
 import { Modal, Input, List } from "antd";
 import Card from "components/card";
 import { translateText } from "components/translate";
+import Link from "next/link";
 
 export default function SearchModal({ open, setOpen }) {
-  const limit = 5;
+  const limit = 10;
   const [search, setSearch] = useState(undefined);
   const [page, setPage] = useState(1);
 
@@ -40,19 +41,12 @@ export default function SearchModal({ open, setOpen }) {
         <List
           className="max-h-[calc(100vh/1.5)] overflow-y-auto overflow-x-hidden py-4 shadow-none items-center justify-center"
           loading={loading}
-          grid={{
-            gutter: 16,
-            xs: 1,
-            sm: 2,
-            md: 3,
-            lg: 3,
-            xl: 3,
-            xxl: 3,
-          }}
-          dataSource={data?.movies?.docs ?? []}
+          dataSource={data ?? []}
           renderItem={(item) => (
             <List.Item>
-              <Card poster={item.poster_path} size="small" />
+              <Link href={`/movies/${item._id}`} className="w-full text-white hover:text-secondary">
+                {item.title}
+              </Link>
             </List.Item>
           )}
         />
