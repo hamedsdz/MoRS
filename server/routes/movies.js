@@ -14,9 +14,17 @@ router.get("/", auth, async (req, res) => {
   const page = parseInt(req.query.page) || 1;
   const limit = parseInt(req.query.limit) || 10;
   const genre = req.query.genre;
+  const country = req.query.country;
 
   try {
-    const movies = await Movie.paginate({ genre: genre }, { page, limit });
+    const query = {};
+    if (genre) {
+      query.genres = { $in: genre.split(",") };
+    }
+    if (country) {
+      query.production_countries = { $in: country.split(",") };
+    }
+    const movies = await Movie.paginate(query, { page, limit });
 
     res.json(movies);
   } catch (err) {
@@ -251,6 +259,32 @@ router.get("/all/popular", auth, async (req, res) => {
 
     // Send the sorted movies as the API response
     res.json(sortedMovies);
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).json({ message: "Server error" });
+  }
+});
+
+// GET /api/movies/all/genres
+// Get all movie genres
+// Private route
+router.get("/all/genres", auth, async (req, res) => {
+  try {
+    const genres = await Movie.distinct("genres");
+    res.json(genres);
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).json({ message: "Server error" });
+  }
+});
+
+// GET /api/movies/all/countries
+// Get all movie production countries
+// Private route
+router.get("/all/countries", auth, async (req, res) => {
+  try {
+    const countries = await Movie.distinct("production_countries");
+    res.json(countries);
   } catch (err) {
     console.error(err.message);
     res.status(500).json({ message: "Server error" });

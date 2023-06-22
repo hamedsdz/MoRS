@@ -1,10 +1,10 @@
 import { useQuery } from "@tanstack/react-query";
-import { getMovies } from "./index";
+import { getMovieCountries } from "./index";
 
-export default function useGetMovies({ page, search, limit, genre, country }) {
+export default function useGetMovieCountries() {
   const { isLoading, isError, data, error, refetch } = useQuery(
-    ["getMovies", { page, search, limit, genre, country }],
-    () => getMovies({ page, search, limit, genre, country }),
+    ["getMovieCountries"],
+    () => getMovieCountries(),
     {
       keepPreviousData: true,
       refetchOnWindowFocus: false,

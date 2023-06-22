@@ -37,7 +37,7 @@ function CustomHeader({ avatar }) {
           </Caption>
         </Link>
       </div>
-      <div className="flex items-center justify-center gap-2">
+      <div className="flex items-center justify-center">
         <div
           className="text-xl md:text-3xl leading-3 text-center text-black cursor-pointer flex items-center justify-center bg-white px-2 py-1 rounded-2xl"
           onClick={() => setShowSearch(true)}
@@ -47,7 +47,7 @@ function CustomHeader({ avatar }) {
             search
           </Caption>
         </div>
-        <div className="rounded-full bg-white p-0.5 md:p-0 cursor-pointer">
+        <div className="rounded-full bg-white p-0.5 md:p-0 cursor-pointer mr-2">
           <Dropdown
             menu={{
               items: [

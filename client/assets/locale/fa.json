@@ -3,7 +3,7 @@
   "search": "جستجو",
   "searchMovie": "جستجو فیلم",
   "showAll": "نمایش همه",
-  "dataNotfound": "اطلاعات مورد نظر یافت نشد!",
+  "dataNotfound": "موردی یافت نشد!",
   "login": "ورود",
   "signup": "ثبت نام",
   "username": "نام کاربری",
@@ -24,5 +24,9 @@
   "popular": "محبوب‌ترین‌ها",
   "recommendation": "فیلم‌های پیشنهادی",
   "more": "بیشتر",
-  "logout": "خروج از حساب"
+  "logout": "خروج از حساب",
+  "movies": "فیلم‌ها",
+  "filters": "فیلترها",
+  "filterByGenre": "فیلتر براساس ژانر",
+  "filterByProductionCountries": "فیلتر براساس کشور سازنده"
 }

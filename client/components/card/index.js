@@ -7,23 +7,23 @@ import { FaStar } from "react-icons/fa";
 import { Tag } from "antd";
 import Link from "next/link";
 import CustomButton from "components/button";
+import { CustomPosterImage } from "components/image";
 
 const { publicRuntimeConfig } = getConfig();
 
-export default function Card({ id, title, overView, genres, score, poster, size }) {
+export default function Card({ id, title, overView, genres, score, poster, className }) {
   const router = useRouter();
   return (
     <div
-      className={`relative ${size} rounded-2xl overflow-hidden shadow-card cursor-pointer mx-2 card`}
+      className={`relative rounded-2xl overflow-hidden shadow-card cursor-pointer mx-2  ${className} card`}
     >
       <div className="poster">
-        <Image
+        <CustomPosterImage
           src={publicRuntimeConfig.posterUrl + poster}
           alt={title}
-          layout="fill"
-          objectFit="contain"
+          fill={true}
+          style={{ objectFit: "cover" }}
           className="relative w-full h-full"
-          quality={100}
         />
       </div>
       <div className="details">
@@ -38,15 +38,17 @@ export default function Card({ id, title, overView, genres, score, poster, size 
             </Caption>
           </div>
         )}
-        {genres && genres.length
-          ? genres.slice(0, 2).map((genre, key) => (
-              <Link href={`/movies?genre=${genre}`}>
-                <Tag key={key} color="#2db7f5" className="text-[.5rem]">
-                  {genre}
-                </Tag>
-              </Link>
-            ))
-          : null}
+        <span>
+          {genres && genres.length
+            ? genres.slice(0, 2).map((genre, key) => (
+                <Link href={`/movies?genre=${genre}`} key={key}>
+                  <Tag color="#2db7f5" className="text-[.5rem]">
+                    {genre}
+                  </Tag>
+                </Link>
+              ))
+            : null}
+        </span>
         <span className="overview mt-3">
           {overView && (
             <Caption

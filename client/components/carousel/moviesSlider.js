@@ -76,17 +76,19 @@ export default function MoviesSlider({ loading, movies, title, className }) {
       <Slider {...settings}>
         {!loading &&
           movies &&
-          movies.map((slide, key) => (
-            <Card
-              key={key}
-              id={slide._id}
-              title={slide.title}
-              overView={slide.overview}
-              genres={slide.genres}
-              score={slide.averageRate}
-              poster={slide.poster_path}
-            />
-          ))}
+          movies
+            .reverse()
+            .map((slide) => (
+              <Card
+                key={slide._id}
+                id={slide._id}
+                title={slide.title}
+                overView={slide.overview}
+                genres={slide.genres}
+                score={slide.averageRate}
+                poster={slide.poster_path}
+              />
+            ))}
       </Slider>
     </div>
   );
