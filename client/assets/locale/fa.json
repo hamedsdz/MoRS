@@ -28,5 +28,6 @@
   "movies": "فیلم‌ها",
   "filters": "فیلترها",
   "filterByGenre": "فیلتر براساس ژانر",
-  "filterByProductionCountries": "فیلتر براساس کشور سازنده"
+  "filterByProductionCountries": "فیلتر براساس کشور سازنده",
+  "yourScore": "امتیاز شما به این فیلم"
 }

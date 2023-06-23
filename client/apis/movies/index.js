@@ -7,6 +7,8 @@ import useGetRandomMovies from "./getRandom";
 import useGetRecommendation from "./getRecommendation";
 import useGetMovieGenres from "./getGenres";
 import useGetMovieCountries from "./getCountries";
+import useGetSingleMovie from "./single";
+import useRatingMovie from "./rating";
 
 const getMovies = ({ search, limit, page, genre, country }) =>
   AxiosInstance.get("/api/movies", { params: { search, limit, page, genre, country } }).then(
@@ -26,6 +28,8 @@ const getMovieGenres = () => AxiosInstance.get("/api/movies/all/genres").then(({
 const getMovieCountries = () =>
   AxiosInstance.get("/api/movies/all/countries").then(({ data }) => data);
 
+const getSingleMovie = (id) => AxiosInstance.get(`/api/movies/${id}`).then(({ data }) => data);
+
 export {
   getMovies,
   getPopularMovies,
@@ -33,6 +37,7 @@ export {
   getRecommendation,
   getMovieGenres,
   getMovieCountries,
+  getSingleMovie,
   useGetMovies,
   useSearchMovies,
   useGetPopularMovies,
@@ -40,4 +45,6 @@ export {
   useGetRecommendation,
   useGetMovieGenres,
   useGetMovieCountries,
+  useGetSingleMovie,
+  useRatingMovie,
 };

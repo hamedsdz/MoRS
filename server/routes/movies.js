@@ -6,6 +6,7 @@ const { spawn } = require("child_process");
 const auth = require("../middleware/auth");
 // models
 const Movie = require("../models/Movie");
+const Rating = require("../models/Rating");
 
 // GET /api/movies
 // Get all movies with pagination
@@ -73,6 +74,7 @@ router.get("/all/random", auth, async (req, res) => {
 // Private route
 router.get("/:id", auth, async (req, res) => {
   const movieId = req.params.id;
+  const userId = req.user.id;
 
   try {
     const movie = await Movie.findById(movieId);
@@ -81,7 +83,9 @@ router.get("/:id", auth, async (req, res) => {
       return res.status(404).json({ message: "Movie not found" });
     }
 
-    res.json({ movie });
+    const userRate = await Rating.findOne({ movie: movieId, user: userId }).exec();
+
+    res.json({ movie, userRate: userRate?.rate || "" });
   } catch (err) {
     console.error(err.message);
     res.status(500).json({ message: "Server error" });
@@ -315,10 +319,6 @@ router.get("/recommendation/list", auth, async (req, res) => {
 
     // Handle the exit of the Python process
     pythonProcess.on("exit", (code) => {
-      if (output === `User ID ${req.user.id} not found in the user_movie_matrix.`) {
-        res.status(401).send("userIdNotFound");
-      }
-
       res.json(JSON.parse(output));
     });
   } catch (err) {

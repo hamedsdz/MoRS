@@ -24,7 +24,6 @@ user_similarity = cosine_similarity(user_movie_matrix)
 
 def get_movie_recommendations(user_id, user_similarity, user_movie_matrix, movies, top_n=10):
     if user_id not in user_movie_matrix.index:
-        print(f"User ID {user_id} not found in the user_movie_matrix.")
         return []
 
     user_index = user_movie_matrix.index.get_loc(user_id)

@@ -44,7 +44,11 @@ export default function SearchModal({ open, setOpen }) {
           dataSource={data ?? []}
           renderItem={(item) => (
             <List.Item>
-              <Link href={`/movies/${item._id}`} className="w-full text-white hover:text-secondary">
+              <Link
+                href={`/movies/${item._id}`}
+                className="w-full text-white hover:text-secondary"
+                onClick={() => setOpen(false)}
+              >
                 {item.title}
               </Link>
             </List.Item>

@@ -22,8 +22,7 @@ export default function Card({ id, title, overView, genres, score, poster, class
           src={publicRuntimeConfig.posterUrl + poster}
           alt={title}
           fill={true}
-          style={{ objectFit: "cover" }}
-          className="relative w-full h-full"
+          className="relative object-cover w-full h-full"
         />
       </div>
       <div className="details">
