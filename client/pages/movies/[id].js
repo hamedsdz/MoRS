@@ -26,29 +26,35 @@ function Movie() {
   }, [data]);
 
   return (
-    <div>
-      <div>
-        <div></div>
-        <div></div>
-      </div>
-      <div className="flex gap-4 items-center scoring">
-        <Caption text bold>
-          yourScore
-        </Caption>
-        {rateLoading ? (
-          <FullLoading />
-        ) : (
-          <InputNumber
-            min="0"
-            max="10"
-            step="0.1"
-            onChange={(value) => !!value && mutate({ movieId: id, rate: value })}
-            value={rate}
-            stringMode
-          />
-        )}
-      </div>
-    </div>
+    <>
+      {!loading ? (
+        <div className="flex flex-col md:flex-row gap-4">
+          <div className="flex items-center gap-6">
+            <div>image</div>
+            <div>details</div>
+          </div>
+          <div className="flex gap-4 items-center scoring">
+            <Caption text bold>
+              yourScore
+            </Caption>
+            {rateLoading ? (
+              <FullLoading />
+            ) : (
+              <InputNumber
+                min="0"
+                max="10"
+                step="0.1"
+                onChange={(value) => !!value && mutate({ movieId: id, rate: value })}
+                value={rate}
+                stringMode
+              />
+            )}
+          </div>
+        </div>
+      ) : (
+        <FullLoading />
+      )}
+    </>
   );
 }
 
