@@ -25,6 +25,9 @@ function Movies() {
     if (router.query?.genre) {
       setGenre(router.query.genre);
     }
+    if (router.query?.country) {
+      setCountry(router.query.country);
+    }
   }, [router.query]);
   return (
     <div className="container max-w-[900px] mb-5">

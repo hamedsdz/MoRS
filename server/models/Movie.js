@@ -29,6 +29,11 @@ const MovieSchema = new mongoose.Schema({
   status: {
     type: String,
   },
+  rate: {
+    type: mongoose.SchemaTypes.Decimal128,
+    min: 0,
+    max: 10,
+  },
   backdrop_image_path: {
     type: String,
   },

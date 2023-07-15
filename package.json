@@ -6,7 +6,7 @@
   "repository": "git@github.com:hamedsdz/MoRS.git",
   "author": "HamedSDZ <hsadeghzadeh79@gmail.com>",
   "license": "MIT",
-  "proxy": "http://localhost:3001/",
+  "proxy": "http://localhost:5500/",
   "scripts": {
     "client": "cd client && yarn run dev",
     "server": "cd server && yarn run start",

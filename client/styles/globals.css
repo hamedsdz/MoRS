@@ -118,7 +118,8 @@ body:focus-within {
 .recommendation .ant-typography,
 .movie-slider-container .ant-typography,
 .card .details .ant-typography,
-.scoring .ant-typography {
+.scoring .ant-typography,
+.details .title .ant-typography {
   color: white !important;
 }
 

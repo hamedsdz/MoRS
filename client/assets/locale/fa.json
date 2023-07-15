@@ -29,5 +29,10 @@
   "filters": "فیلترها",
   "filterByGenre": "فیلتر براساس ژانر",
   "filterByProductionCountries": "فیلتر براساس کشور سازنده",
-  "yourScore": "امتیاز شما به این فیلم"
+  "yourScore": "امتیاز شما به این فیلم",
+  "submitRate": "ثبت امتیاز",
+  "genres": "ژانرها",
+  "productionCountries": "کشورهای سازنده",
+  "descriptions": "توضیحات",
+  "title": "عنوان"
 }
