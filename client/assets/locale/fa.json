@@ -34,5 +34,10 @@
   "genres": "ژانرها",
   "productionCountries": "کشورهای سازنده",
   "descriptions": "توضیحات",
-  "title": "عنوان"
+  "title": "عنوان",
+  "Invalid credentials": "نام کاربری یا گذرواژه اشتباه است",
+  "User already exists": "نام کاربری قبلا ثبت شده است",
+  "Server error": "خطای اتصال به سرور",
+  "Movie not found": "فیلم مورد نظر یافت نشد",
+  "Movie deleted successfully": "فیلم با موفقیت حذف شد"
 }

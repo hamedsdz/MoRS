@@ -30,7 +30,7 @@ router.get("/", auth, async (req, res) => {
     res.json(movies);
   } catch (err) {
     console.error(err.message);
-    res.status(500).json({ message: "Server error" });
+    res.status(500).json({ errors: [{ msg: "Server error" }] });
   }
 });
 
@@ -51,7 +51,7 @@ router.get("/all/search", auth, async (req, res) => {
     res.json(movies);
   } catch (err) {
     console.error(err.message);
-    res.status(500).json({ message: "Server error" });
+    res.status(500).json({ errors: [{ msg: "Server error" }] });
   }
 });
 
@@ -65,7 +65,7 @@ router.get("/all/random", auth, async (req, res) => {
     res.json(movies);
   } catch (err) {
     console.error(err.message);
-    res.status(500).json({ message: "Server error" });
+    res.status(500).json({ errors: [{ msg: "Server error" }] });
   }
 });
 
@@ -80,7 +80,7 @@ router.get("/:id", auth, async (req, res) => {
     const movie = await Movie.findById(movieId);
 
     if (!movie) {
-      return res.status(404).json({ message: "Movie not found" });
+      return res.status(404).json({ errors: [{ msg: "Movie not found" }] });
     }
 
     const userRate = await Rating.findOne({ movie: movieId, user: userId }).exec();
@@ -88,7 +88,7 @@ router.get("/:id", auth, async (req, res) => {
     res.json({ movie, userRate: userRate?.rate || "" });
   } catch (err) {
     console.error(err.message);
-    res.status(500).json({ message: "Server error" });
+    res.status(500).json({ errors: [{ msg: "Server error" }] });
   }
 });
 
@@ -119,6 +119,7 @@ router.post(
       production_countries,
       release_date,
       status,
+      rate,
       backdrop_image_path,
     } = req.body;
 
@@ -132,6 +133,7 @@ router.post(
         production_countries,
         release_date,
         status,
+        rate,
         backdrop_image_path,
       });
 
@@ -140,7 +142,7 @@ router.post(
       res.json({ movie });
     } catch (err) {
       console.error(err.message);
-      res.status(500).json({ message: "Server error" });
+      res.status(500).json({ errors: [{ msg: "Server error" }] });
     }
   }
 );
@@ -172,6 +174,7 @@ router.put(
       production_countries,
       release_date,
       status,
+      rate,
       backdrop_image_path,
     } = req.body;
 
@@ -187,19 +190,20 @@ router.put(
           production_countries,
           release_date,
           status,
+          rate,
           backdrop_image_path,
         },
         { new: true }
       );
 
       if (!movie) {
-        return res.status(404).json({ message: "Movie not found" });
+        return res.status(404).json({ errors: [{ msg: "Movie not found" }] });
       }
 
       res.json({ movie });
     } catch (err) {
       console.error(err.message);
-      res.status(500).json({ message: "Server error" });
+      res.status(500).json({ errors: [{ msg: "Server error" }] });
     }
   }
 );
@@ -212,20 +216,33 @@ router.delete("/:id", auth, async (req, res) => {
     const movie = await Movie.findByIdAndDelete(req.params.id);
 
     if (!movie) {
-      return res.status(404).json({ message: "Movie not found" });
+      return res.status(404).json({ errors: [{ msg: "Movie not found" }] });
     }
 
-    res.json({ message: "Movie deleted successfully" });
+    res.json({ errors: [{ msg: "Movie deleted successfully" }] });
   } catch (err) {
     console.error(err.message);
-    res.status(500).json({ message: "Server error" });
+    res.status(500).json({ errors: [{ msg: "Server error" }] });
   }
 });
 
 // GET /api/movies/all/popular
-// Get popular movies
+// Get popular movies by ratings
 // Private route
 router.get("/all/popular", auth, async (req, res) => {
+  try {
+    const popularMovies = await Movie.find().sort({ rate: -1 }).limit(10);
+    return res.json(popularMovies);
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).json({ errors: [{ msg: "Server error" }] });
+  }
+});
+
+// GET /api/movies/all/popular/rated
+// Get popular movies by ratings
+// Private route
+router.get("/all/popular/rated", auth, async (req, res) => {
   try {
     // Retrieve all movies with their associated ratings
     const movies = await Movie.aggregate([
@@ -265,7 +282,7 @@ router.get("/all/popular", auth, async (req, res) => {
     res.json(sortedMovies);
   } catch (err) {
     console.error(err.message);
-    res.status(500).json({ message: "Server error" });
+    res.status(500).json({ errors: [{ msg: "Server error" }] });
   }
 });
 
@@ -278,7 +295,7 @@ router.get("/all/genres", auth, async (req, res) => {
     res.json(genres);
   } catch (err) {
     console.error(err.message);
-    res.status(500).json({ message: "Server error" });
+    res.status(500).json({ errors: [{ msg: "Server error" }] });
   }
 });
 
@@ -291,7 +308,7 @@ router.get("/all/countries", auth, async (req, res) => {
     res.json(countries);
   } catch (err) {
     console.error(err.message);
-    res.status(500).json({ message: "Server error" });
+    res.status(500).json({ errors: [{ msg: "Server error" }] });
   }
 });
 

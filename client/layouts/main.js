@@ -6,7 +6,7 @@ export default function MainLayout({ children }) {
   return (
     <>
       <CustomHeader />
-      <main className=" flex items-center justify-center px-5">
+      <main className="px-5">
         <div>{children}</div>
       </main>
     </>

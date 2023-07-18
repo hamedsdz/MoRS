@@ -32,7 +32,6 @@ function Movie() {
       setRate(data.userRate);
     }
   }, [data]);
-  console.log(rate);
 
   return (
     <>

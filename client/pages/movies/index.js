@@ -30,7 +30,7 @@ function Movies() {
     }
   }, [router.query]);
   return (
-    <div className="container max-w-[900px] mb-5">
+    <div className="container max-w-[900px] w-full mb-5">
       <AntCard className="mb-5 rounded-xl">
         <Caption text bold>
           filters
