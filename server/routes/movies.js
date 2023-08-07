@@ -229,20 +229,20 @@ router.delete("/:id", auth, async (req, res) => {
 // GET /api/movies/all/popular
 // Get popular movies by ratings
 // Private route
-router.get("/all/popular", auth, async (req, res) => {
-  try {
-    const popularMovies = await Movie.find().sort({ rate: -1 }).limit(10);
-    return res.json(popularMovies);
-  } catch (err) {
-    console.error(err.message);
-    res.status(500).json({ errors: [{ msg: "Server error" }] });
-  }
-});
+// router.get("/all/popular", auth, async (req, res) => {
+//   try {
+//     const popularMovies = await Movie.find().sort({ rate: -1 }).limit(10);
+//     return res.json(popularMovies);
+//   } catch (err) {
+//     console.error(err.message);
+//     res.status(500).json({ errors: [{ msg: "Server error" }] });
+//   }
+// });
 
-// GET /api/movies/all/popular/rated
+// GET /api/movies/all/popular
 // Get popular movies by ratings
 // Private route
-router.get("/all/popular/rated", auth, async (req, res) => {
+router.get("/all/popular", auth, async (req, res) => {
   try {
     // Retrieve all movies with their associated ratings
     const movies = await Movie.aggregate([

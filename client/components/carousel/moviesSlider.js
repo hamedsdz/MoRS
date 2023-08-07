@@ -85,7 +85,7 @@ export default function MoviesSlider({ loading, movies, title, className }) {
                 title={slide.title}
                 overView={slide.overview}
                 genres={slide.genres}
-                score={parseFloat(slide.rate.$numberDecimal).toFixed(1)}
+                score={slide.averageRate}
                 poster={slide.poster_path}
               />
             ))}
